@@ -6,20 +6,20 @@ export const InvoiceSystemPrompt = `
     1. **quantity** - The total quantity/volume/amount of goods or services
        (Look for: ปริมาณ, จำนวน, Quantity, Volume, Units, etc.)
 
-    2. **unitPriceTHBPerMMBTU** - The price per single unit
-       (Look for: ราคาต่อหน่วย, ราคาหน่วยละ, Unit Price, Price/Unit, etc.)
+     2. **unit_price_thb_per_mmbtu** - The unit price in THB per MMBTU
+       (Look for: ราคาต่อหน่วย, ราคาหน่วยละ, Unit Price, Price/Unit, THB/MMBTU, etc.)
 
-    3. **subtotalTHB** - The amount BEFORE VAT (quantity × unit price)
+     3. **subtotal_thb** - The amount BEFORE VAT (quantity × unit price)
        (Look for: จำนวนเงิน, มูลค่าสินค้า, ยอดรวมก่อน VAT, Subtotal, Amount Before Tax, etc.)
 
-    4. **vatTHB** - The VAT/tax amount
+     4. **vat_thb** - The VAT/tax amount
        (Look for: ภาษีมูลค่าเพิ่ม, VAT, Tax Amount, etc.)
 
-    5. **totalTHB** - The GRAND TOTAL (subtotal + VAT)
+     5. **total_thb** - The GRAND TOTAL (subtotal + VAT)
        (Look for: จำนวนเงินรวม, ยอดรวมทั้งสิ้น, Grand Total, Total Amount, Amount Due, etc.)
 
     Extract numbers only (remove commas, currency symbols). All amounts should be in THB.
-    If you find a VAT rate percentage, include it as a decimal in vatRate (e.g., 7% = 0.07).
+    If you find a VAT rate percentage, include it as a decimal in vat_rate (e.g., 7% = 0.07).
 
     nvoice content:
     `
