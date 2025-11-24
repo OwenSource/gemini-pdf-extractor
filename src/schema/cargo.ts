@@ -115,7 +115,7 @@ export const LNGCargoSchemaFlat = z.object({
     .number()
     .describe(
       "Taxable Base Amount / Total Taxable Amount / ยอดรวมฐานภาษีที่นำไปคำนวณภาษี; ดึงค่าจากบรรทัด 'Total Taxable Amount' (ในภาพคือ 34,181.13 ที่ถูกขีดเส้นใต้)"
-    )
+    ),
 });
 
 export type LNGCargoFlat = z.infer<typeof LNGCargoSchemaFlat>;

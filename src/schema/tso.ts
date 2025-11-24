@@ -2,15 +2,14 @@ import { z } from "zod";
 
 // 1. Zod Schema
 export const TSOfileSchema = z.object({
-    quantity_gas_volume_pipeline: z
-        .number()
-        .describe(
-            "ปริมาณก๊าซธรรมชาติที่ส่งผ่านท่อ (Gas Volume / Pipeline Quantity) ที่ทุกจุดจ่ายออก หน่วยเป็นลูกบาศก์เมตร (ลบ.ม.) ในภาพคือค่าที่ถูกไฮไลต์สีเหลือง"
-        )
+  quantity_gas_volume_pipeline: z
+    .number()
+    .describe(
+      "ปริมาณก๊าซธรรมชาติที่ส่งผ่านท่อ (Gas Volume / Pipeline Quantity) ที่ทุกจุดจ่ายออก หน่วยเป็นลูกบาศก์เมตร (ลบ.ม.) ในภาพคือค่าที่ถูกไฮไลต์สีเหลือง"
+    ),
 });
 
 export type TSOfile = z.infer<typeof TSOfileSchema>;
-
 
 // 2. System Prompt
 export const TSO_SYSTEM_PROMPT = `

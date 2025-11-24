@@ -5,6 +5,13 @@ on:
     branches:
       - main
     types: [opened, synchronize, reopened]
+    paths:
+      - "**.ts"
+      - "package.json"
+      - "bun.lock"
+      - "tsconfig.json"
+
+  workflow_dispatch:
 
 jobs:
   test-build:
