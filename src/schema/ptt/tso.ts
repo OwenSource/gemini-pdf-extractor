@@ -1,11 +1,17 @@
 import { z } from "zod";
 
 const RequestedGasVolumesSchema = z.object({
-    volumeArea2KhanomMMBTU: z.number().describe("ปริมาณก๊าซฯ บนระบบท่อฯบนฝั่งขนอม (พื้นที่ 2)"),
+  volumeArea2KhanomMMBTU: z
+    .number()
+    .describe("ปริมาณก๊าซฯ บนระบบท่อฯบนฝั่งขนอม (พื้นที่ 2)"),
 
-    volumeArea3OnshoreMMBTU: z.number().describe("ปริมาณก๊าซฯ บนระบบท่อฯบนฝั่ง (พื้นที่ 3)"),
+  volumeArea3OnshoreMMBTU: z
+    .number()
+    .describe("ปริมาณก๊าซฯ บนระบบท่อฯบนฝั่ง (พื้นที่ 3)"),
 
-    volumeArea4ChanaMMBTU: z.number().describe("ปริมาณก๊าซฯ บนระบบท่อฯบนฝั่งจะนะ (พื้นที่ 4)"),
+  volumeArea4ChanaMMBTU: z
+    .number()
+    .describe("ปริมาณก๊าซฯ บนระบบท่อฯบนฝั่งจะนะ (พื้นที่ 4)"),
 });
 
 export type PttRequestedGasVolumes = z.infer<typeof RequestedGasVolumesSchema>;
@@ -27,8 +33,8 @@ const systemPrompt = `You are a highly specialized data extraction system. Your 
 * Do not include any explanatory text, code fences, or markdown beyond the final JSON object.`;
 
 export const pttTSOSchemaAndPrompt = {
-   gasAmount:{
-       systemPrompt,
-       schema: RequestedGasVolumesSchema,
-    } 
+  gasAmount: {
+    systemPrompt,
+    schema: RequestedGasVolumesSchema,
+  },
 };

@@ -23,12 +23,21 @@ export const tsoRoutes = new Elysia().group("/tso", (c) =>
             pttTSOSchemaAndPrompt.gasAmount.schema
           )
         ),
-        Effect.andThen(({volumeArea2KhanomMMBTU, volumeArea3OnshoreMMBTU, volumeArea4ChanaMMBTU}) => {
-          const sum = volumeArea2KhanomMMBTU + volumeArea3OnshoreMMBTU + volumeArea4ChanaMMBTU
-          return {
-            volumeArea234: sum
+        Effect.andThen(
+          ({
+            volumeArea2KhanomMMBTU,
+            volumeArea3OnshoreMMBTU,
+            volumeArea4ChanaMMBTU,
+          }) => {
+            const sum =
+              volumeArea2KhanomMMBTU +
+              volumeArea3OnshoreMMBTU +
+              volumeArea4ChanaMMBTU;
+            return {
+              volumeArea234: sum,
+            };
           }
-        }),
+        ),
         Runtime.runPromise
       );
 
