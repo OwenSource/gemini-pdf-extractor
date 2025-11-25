@@ -76,6 +76,7 @@ export const supplyRoutes = new Elysia().group("/supply", (c) =>
                 B8InvoiceAndHeatSchemaAndSystemPrompt.prompt,
                 B8InvoiceAndHeatSchemaAndSystemPrompt.schema
               )
+
               .pipe(
                 Effect.andThen((data) => ({
                   ...data,
