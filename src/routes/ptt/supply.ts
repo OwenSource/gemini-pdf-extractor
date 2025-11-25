@@ -11,6 +11,7 @@ import { B8InvoiceAndHeatSchemaAndSystemPrompt } from "../../schema/ptt/b8-invoi
 import { pttC5SchemaandPromt } from "../../schema/ptt/c5-g448";
 import { invoiceAndHeatSchemaAndPrompt } from "../../schema/ptt/invoice-register-and-heat";
 import { pttJdaSchemaAndPrompt } from "../../schema/ptt/jda-a18-b17";
+import { pailinSchemaAndPrompt } from "../../schema/ptt/pailin";
 import { pttSupplySchemaAndPrompt as PttSupplySchemaAndPromptSouthern } from "../../schema/ptt/ptt-supply";
 import { pttSupplySchemaAndPrompt } from "../../schema/ptt/supply";
 import { supplyClassification } from "../../schema/ptt/supply.classification";
@@ -112,7 +113,7 @@ export const supplyRoutes = new Elysia().group("/supply", (c) =>
                 }),
                 Effect.andThen(({ svcData, totalInvoiceAmount }) => ({
                   ...svcData,
-                  totalInvoiceAmount,
+                  totalInvoiceAmount: totalInvoiceAmount.toFixed(2),
                 })),
                 Effect.orElseSucceed(() => null)
               );
@@ -378,7 +379,7 @@ export const supplyRoutes = new Elysia().group("/supply", (c) =>
           }),
           Effect.andThen(({ svcData, totalInvoiceAmount }) => ({
             ...svcData,
-            totalInvoiceAmount,
+            totalInvoiceAmount: totalInvoiceAmount.toFixed(2),
           })),
           Effect.tap((data) => Effect.log("data", data)),
           Effect.tapError((error) => Effect.logError("error -->", error.error)),
@@ -587,6 +588,65 @@ export const supplyRoutes = new Elysia().group("/supply", (c) =>
               pttC5SchemaandPromt.g448.schema
             )
           ),
+          Effect.tap((data) => Effect.log("data", data)),
+          Effect.tapError((error) => Effect.logError("error -->", error.error)),
+          Effect.catchTag("ExtractPDF/Process/Error", (error) =>
+            Effect.succeed(
+              Response.json(
+                {
+                  message: error.message,
+                  error: error.error,
+                  status: "500",
+                },
+                {
+                  status: 500,
+                }
+              )
+            )
+          )
+        );
+
+        const result = await Runtime.runPromise(program);
+        return result;
+      },
+      {
+        body: t.Object({
+          file: elysiaPdf,
+        }),
+        tags: ["PTT"],
+      }
+    )
+    .post(
+      "/pailin",
+      async ({ body }) => {
+        const arrBuf = await body.file.arrayBuffer();
+        const buf = Buffer.from(arrBuf);
+
+        const program = Effect.all({
+          svc: ExtractPDFService,
+        }).pipe(
+          Effect.andThen(({ svc }) =>
+            svc.processInline(
+              buf,
+              pailinSchemaAndPrompt.systemPrompt,
+              pailinSchemaAndPrompt.schema
+            )
+          ),
+          Effect.andThen((data) => {
+            const n = Array.flatMap(data.invoices, (d) =>
+              Array.map(d.lineItems, (a) => a.amountExcludingVAT)
+            );
+            const totalInvoiceAmount = Array.reduce(
+              n,
+              0,
+              (acc, cur) => acc + cur
+            );
+
+            return {
+              ...data,
+              totalInvoiceAmount: totalInvoiceAmount.toFixed(2),
+            };
+          }),
           Effect.tap((data) => Effect.log("data", data)),
           Effect.tapError((error) => Effect.logError("error -->", error.error)),
           Effect.catchTag("ExtractPDF/Process/Error", (error) =>
