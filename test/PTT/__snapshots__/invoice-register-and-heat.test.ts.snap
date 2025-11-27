@@ -1,0 +1,31 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ptt invoice register > should extract ok 1`] = `
+{
+  "heatQuantityData": {
+    "confidenceScore": 95,
+    "heatQuantity_MMBTU": 16521.739,
+  },
+  "invoiceData": [
+    {
+      "confidenceScore": 100,
+      "currency": "THB",
+      "description": "Total gas sale for August 2025 Contract 5",
+      "netAmount_InclVAT": 1491317.66,
+      "totalAmount_ExclVAT": 1393754.82,
+      "vatAmount": 97562.84,
+      "vendor": "Mitsui Energy Development Co., Ltd.",
+    },
+    {
+      "confidenceScore": 100,
+      "currency": "THB",
+      "description": "ค่าก๊าซฯแหล่งC5เดือน ส.ค. 68",
+      "netAmount_InclVAT": 2236976.26,
+      "totalAmount_ExclVAT": 2090632.02,
+      "vatAmount": 146344.24,
+      "vendor": "Chevron Thailand Exploration and Production, Ltd.",
+    },
+  ],
+  "overallConfidenceScore": 98,
+}
+`;

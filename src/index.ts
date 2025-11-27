@@ -1,5 +1,5 @@
 import openapi from "@elysiajs/openapi";
-import { Effect } from "effect";
+import { Array, Effect } from "effect";
 import Elysia, { t } from "elysia";
 import { ExtractPDFService } from "./extract-pdf.service";
 import { pttRoutes } from "./routes/ptt";
@@ -14,11 +14,13 @@ import { TSO_SYSTEM_PROMPT, TSOfileSchema } from "./schema/tso";
 
 const app = new Elysia();
 
+console.log(process.env);
+
 function debugEnv() {
   const program = Effect.Do.pipe(
     Effect.tap(() => Effect.logDebug("env", process.env))
   );
-  Runtime.runSync(program);
+  Runtime.runPromise(program);
 }
 
 debugEnv();
@@ -27,6 +29,12 @@ app
   .use(
     openapi({
       path: "/docs",
+      documentation: {
+        info: {
+          title: "PDF Extractor",
+          version: "1.0.0",
+        },
+      },
     })
   )
   .get("/health", () => "Ok")
@@ -130,6 +138,14 @@ app
         Effect.andThen(({ svc }) =>
           svc.processInline(fileBuffer, CARGO_SYSTEM_PROMPT, LNGCargoSchemaFlat)
         ),
+        Effect.andThen((data) => ({
+          ...data,
+          customs_clearance_services_total: Array.reduce(
+            data.customs_clearance_services,
+            0,
+            (acc, cur) => acc + cur.final_cost
+          ),
+        })),
         Effect.catchTag("ExtractPDF/Process/Error", (error) => {
           set.status = 500;
           return Effect.succeed({
