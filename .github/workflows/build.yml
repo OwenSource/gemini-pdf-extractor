@@ -34,7 +34,10 @@ jobs:
           push: true
           context: .
           file: Dockerfile
-          tags: ${{ env.USERNAME }}/${{ env.IMG_NAME }}:latest
+          tags: |
+            ${{ env.USERNAME }}/${{ env.IMG_NAME }}:latest
+            ${{ env.USERNAME }}/${{ env.IMG_NAME }}:latest2
+            ${{ env.USERNAME }}/${{ env.IMG_NAME }}:latest3
           cache-from: type=registry,ref=${{ env.USERNAME }}/${{ env.IMG_NAME }}:latest
           cache-to: type=inline
   noti:
